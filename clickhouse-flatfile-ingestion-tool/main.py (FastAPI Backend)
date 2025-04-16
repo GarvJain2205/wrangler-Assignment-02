@@ -1,0 +1,87 @@
+from fastapi import FastAPI, UploadFile, Form, Request
+from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+import pandas as pd
+import os
+from clickhouse_connect import get_client
+
+app = FastAPI()
+
+# Template and static folder setup
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Directory to save uploaded/exported CSV files
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+# -------------------------------
+# 1. Home Page (HTML UI)
+# -------------------------------
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+# -----------------------------------------------
+# 2. Upload CSV → Insert into ClickHouse
+# -----------------------------------------------
+@app.post("/upload/")
+async def upload_csv(
+    file: UploadFile,
+    host: str = Form(...),
+    user: str = Form(...),
+    password: str = Form(...),
+    database: str = Form(...)
+):
+    # Save uploaded CSV file
+    file_path = os.path.join(UPLOAD_DIR, file.filename)
+    with open(file_path, "wb") as buffer:
+        buffer.write(await file.read())
+
+    # Read CSV using pandas
+    df = pd.read_csv(file_path)
+
+    # Connect to ClickHouse
+    client = get_client(host=host, username=user, password=password, database=database)
+
+    # Define target table name
+    table_name = "uploaded_data"
+
+    # Generate CREATE TABLE query dynamically from CSV columns
+    create_stmt = f"""
+        CREATE TABLE IF NOT EXISTS {table_name} (
+            {', '.join([f'{col} String' for col in df.columns])}
+        ) ENGINE = MergeTree() ORDER BY tuple()
+    """
+    client.command(create_stmt)  # Execute table creation
+    client.insert_df(table_name, df)  # Insert data into table
+
+    return {"status": "Uploaded and inserted successfully", "rows": len(df)}
+
+
+# -----------------------------------------------------
+# 3. Export ClickHouse Table → Download CSV File
+# -----------------------------------------------------
+@app.post("/export/")
+async def export_data(
+    host: str = Form(...),
+    user: str = Form(...),
+    password: str = Form(...),
+    database: str = Form(...),
+    table: str = Form(...)
+):
+    # Connect to ClickHouse
+    client = get_client(host=host, username=user, password=password, database=database)
+
+    # Query all rows from the given table
+    result = client.query(f"SELECT * FROM {table}")
+    df = result.result_df
+
+    # Save result as CSV
+    export_path = os.path.join(UPLOAD_DIR, f"{table}_export.csv")
+    df.to_csv(export_path, index=False)
+
+    # Return file to user
+    return FileResponse(export_path, media_type='text/csv', filename=f"{table}_export.csv")
