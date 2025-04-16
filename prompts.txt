@@ -1,0 +1,45 @@
+🔧 Architecture & Setup
+“Generate a high-level architecture for a web-based application that enables bidirectional data ingestion between ClickHouse and a flat file (CSV), including frontend, backend, and data processing layers.”
+
+“Suggest the best tech stack for a full-stack app with backend in Go or Java and frontend in React for handling ClickHouse <-> Flat File ingestion.”
+
+“Provide Docker setup instructions for a local ClickHouse instance with example datasets like uk_price_paid and ontime.”
+
+📡 ClickHouse Integration
+“Show me how to connect to ClickHouse using a JWT token for authentication in Go (or Python).”
+
+“Write a function to fetch all table names from a ClickHouse database using the official ClickHouse Go client.”
+
+“Give me code to run a SQL SELECT query in ClickHouse using JWT-based authentication.”
+
+🗃️ Flat File Handling
+“How to parse a CSV file in Go (or Java) and extract schema (column names, types) dynamically?”
+
+“Show how to read a CSV file with user-defined delimiter and preview the first 100 rows.”
+
+🔄 Data Ingestion Logic
+“Write a Go function to ingest selected columns from a ClickHouse table into a CSV file using streaming or batching.”
+
+“Write code to take a flat file (CSV) and ingest it into a new ClickHouse table, with schema inferred from CSV headers.”
+
+“What is the best way to handle column data type mismatches between ClickHouse and a CSV file during ingestion?”
+
+🖥️ Frontend & UI
+“Create a React form for selecting a source (ClickHouse or Flat File), entering connection details, and listing tables or columns.”
+
+“How to build a UI in React that displays table columns as checkboxes for selection?”
+
+“Show an example React component to display a status area with states like Connecting, Ingesting, Completed, and Error.”
+
+“Add a progress bar in React that updates based on ingestion progress (can be approximate).”
+
+➕ Bonus / Advanced Features
+“How to join multiple ClickHouse tables based on user input JOIN keys, and ingest the result into a flat file?”
+
+“Write a JOIN query for ClickHouse that combines two tables based on user-defined keys.”
+
+⚙️ Testing & Validation
+“Give me a list of test cases for validating bidirectional ingestion between ClickHouse and flat files.”
+
+“Create a Go test function that verifies the number of records transferred from ClickHouse to a CSV file.”
+
