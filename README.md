@@ -1,44 +1,55 @@
-# 📥 Zeotap Data Ingestion Assignment
+# 🔄 ClickHouse ↔ CSV Ingestion Tool
 
-This project showcases a simple data ingestion pipeline using **FastAPI** as the backend and **an HTML-based web interface** as the frontend. The system supports uploading a CSV file and exporting data from a ClickHouse table — simulating real-world data ingestion and extraction tasks.
+A full-stack web application that allows users to perform **bidirectional data ingestion** between a ClickHouse database and flat files (CSV), with JWT-based authentication, column selection, and record count reporting.
+
+## 📦 Project Structure
+
+- `backend/`: Spring Boot API (Java) for ClickHouse & CSV handling
+- `frontend/`: React UI with Axios integration and dynamic schema controls
 
 ---
 
-## 📁 Project Structure
+## 🚀 Features
 
-zeotap-assignment/ ├── main.py # FastAPI app with upload/export logic ├── templates/ │ └── index.html # Web UI for interacting with API ├── uploads/ # Directory to store uploaded/exported files ├── requirements.txt # Python dependencies └── README.md
+✅ ClickHouse → CSV with selected columns  
+✅ CSV → ClickHouse (creates table & ingests data)  
+✅ JWT authentication support  
+✅ Table and column fetching  
+✅ Clear status & record count display  
+✅ Ready for Dockerization and further deployment
 
-## ⚙️ Setup Instructions
+---
 
-### ✅ Requirements
+## 🔧 Setup Instructions
 
-- Python 3.8+
-- Pip or any Python package manager
+### Backend
 
-### 📦 Installation
+```bash
+cd backend
+mvn spring-boot:run
 
-1. Clone the repository:
+Frontend:
+cd frontend
+npm install
+npm start
+Runs on http://localhost:3000
+cd backend
+mvn spring-boot:run
 
-   ```bash
-   git clone https://github.com/your-username/zeotap-assignment.git
-   cd zeotap-assignment
 
-  Install required packages:
+🧰 Libraries & Frameworks
+🧠 Backend (Java):
+Spring Boot: REST API framework
 
-2. Install required packages:
- pip install -r requirements.txt
+ClickHouse JDBC: Connects to ClickHouse via Java
 
-3.Start the FastAPI development server:
- uvicorn main:app --reload
+OpenCSV: Reads/writes CSV files
 
-4.Now open your browser and navigate to:
-http://localhost:8000
+Lombok (via @Data): Simplifies DTO creation (optional)
 
-💡 Features
-📤 Upload CSV → Insert into ClickHouse
+🎨 Frontend (React):
+React (JSX + Hooks): UI framework
 
-📥 Export from ClickHouse → Download CSV
+Axios: HTTP client for frontend-to-backend communication
 
-✅ Supports specifying host, user, password, DB, and table
-
-🎨 Easy HTML-based UI, no JS/React overhead
+TailwindCSS (optional): Utility-first CSS framework
