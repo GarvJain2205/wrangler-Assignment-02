@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ClickHouse ↔️ Flat File Ingestion Tool</title>
+</head>
+<body>
+    <h2>📤 Upload CSV → ClickHouse</h2>
+    <form action="/upload/" method="post" enctype="multipart/form-data">
+        Host: <input name="host" value="localhost"><br>
+        User: <input name="user" value="default"><br>
+        Password: <input name="password"><br>
+        Database: <input name="database" value="default"><br><br>
+        File: <input type="file" name="file"><br><br>
+        <input type="submit" value="Upload & Insert">
+    </form>
+
+    <hr>
+
+    <h2>📥 Export ClickHouse → CSV</h2>
+    <form action="/export/" method="post">
+        Host: <input name="host" value="localhost"><br>
+        User: <input name="user" value="default"><br>
+        Password: <input name="password"><br>
+        Database: <input name="database" value="default"><br>
+        Table: <input name="table" value="uploaded_data"><br><br>
+        <input type="submit" value="Export to CSV">
+    </form>
+</body>
+</html>
